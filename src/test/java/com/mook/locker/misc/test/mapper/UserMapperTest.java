@@ -81,6 +81,13 @@ public class UserMapperTest {
 		Integer result = userMapper.updateUserName(100,"newName",100L);
 		Assert.assertEquals(1L, Long.parseLong(result + ""));
 	}
+
+	@Test
+	public void updateTest() {
+		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+		Integer result = userMapper.update(user);
+		Assert.assertEquals(1L, Long.parseLong(result + ""));
+	}
 	
 	@Test
 	public void updateUserMapTest() {

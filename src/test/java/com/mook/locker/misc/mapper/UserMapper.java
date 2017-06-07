@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.mook.locker.annotation.VersionLocker;
 import com.mook.locker.misc.domain.User;
 
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
 	
 	// 参数为POJO对象方式(推荐使用方式1)
 	@VersionLocker(true)

@@ -68,7 +68,7 @@ import com.mook.locker.util.PluginUtil;
  *
  */
 @Intercepts({
-	@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class}),
+	@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class,Integer.class}),
 	@Signature(type = ParameterHandler.class, method = "setParameters", args = {PreparedStatement.class})
 })
 public class OptimisticLocker implements Interceptor {

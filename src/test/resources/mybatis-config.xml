@@ -6,7 +6,7 @@
 
 	<plugins>
 		<plugin interceptor="com.mook.locker.interceptor.OptimisticLocker">
-			<property name="point" value=".*UserMapper.updateUserName" />
+			<property name="point" value=".*UserMapper.updateUserName,.*UserMapper.update" />
 		</plugin>
 	</plugins>
 	

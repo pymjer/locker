@@ -6,7 +6,7 @@
 
 	<groupId>com.mook</groupId>
 	<artifactId>locker</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.2</version>
 	<packaging>jar</packaging>
 
 	<scm>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-			<version>3.3.1</version>
+			<version>3.4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

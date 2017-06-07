@@ -120,13 +120,14 @@ class VersionLockerResolver {
 			}
 		}
 		Class<?> mapper = mapperMap.get(nameSpace);
-		Method m;
+
 		try {
-			m = mapper.getMethod(id.substring(pos + 1), paramCls);
+			Method m = mapper.getMethod(id.substring(pos + 1),paramCls);
+			versionLocker = m.getAnnotation(VersionLocker.class);
 		} catch (NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("The Map type param error." + e, e);
+			// 找不到方法，忽略
 		}
-		versionLocker = m.getAnnotation(VersionLocker.class);
+
 		if(null == versionLocker) {
 			versionLocker = falseLocker;
 		}
