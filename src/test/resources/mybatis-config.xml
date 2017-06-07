@@ -5,7 +5,9 @@
 <configuration>
 
 	<plugins>
-		<plugin interceptor="com.mook.locker.interceptor.OptimisticLocker"/>
+		<plugin interceptor="com.mook.locker.interceptor.OptimisticLocker">
+			<property name="point" value=".*UserMapper.updateUserName" />
+		</plugin>
 	</plugins>
 	
 	<environments default="development">
@@ -13,9 +15,9 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="UNPOOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
-				<property name="url" value="jdbc:mysql://localhost:3306/mybatis" />
+				<property name="url" value="jdbc:mysql://localhost:3306/test" />
 				<property name="username" value="root" />
-				<property name="password" value="123456" />
+				<property name="password" value="" />
 			</dataSource>
 		</environment>
 	</environments>

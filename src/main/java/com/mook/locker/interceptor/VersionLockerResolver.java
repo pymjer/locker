@@ -128,7 +128,7 @@ class VersionLockerResolver {
 		}
 		versionLocker = m.getAnnotation(VersionLocker.class);
 		if(null == versionLocker) {
-			versionLocker = trueLocker;
+			versionLocker = falseLocker;
 		}
 		if(!versionLockerCache.containMethodSignature(vm)) {
 			versionLockerCache.cacheMethod(vm, versionLocker);

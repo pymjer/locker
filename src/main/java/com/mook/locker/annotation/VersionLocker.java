@@ -35,5 +35,5 @@ import java.lang.annotation.Target;
 public @interface VersionLocker {
 	
 	// Plugin intercepte update method by default, but except marked by @VersionLocker(false)
-	boolean value() default true;
+	boolean value() default false;
 }

@@ -23,10 +23,15 @@
  */
 package com.mook.locker.interceptor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -70,30 +75,27 @@ public class OptimisticLocker implements Interceptor {
 	
 	private static final Log log = LogFactory.getLog(OptimisticLocker.class);
 	private Properties props = null;
+	private List<String> points = null;
 	
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object intercept(Invocation invocation) throws Exception {
-		
 		String versionColumn;
 		if(null == props || props.isEmpty()) {
 			versionColumn = "version";
 		} else {
 			versionColumn = props.getProperty("versionColumn", "version");
 		}
-		
+
 		String interceptMethod = invocation.getMethod().getName();
 		if("prepare".equals(interceptMethod)) {
 			
 			StatementHandler routingHandler = (StatementHandler) PluginUtil.processTarget(invocation.getTarget());
 			MetaObject routingMeta = SystemMetaObject.forObject(routingHandler);
 			MetaObject hm = routingMeta.metaObjectForProperty("delegate");
-			
-			VersionLocker vl = VersionLockerResolver.resolve(hm);
-			if(null != vl && !vl.value()) {
-				return invocation.proceed();
-			}
-			
+
+			if (!isVersionLock(hm)) return invocation.proceed();
+
 			String originalSql = (String) hm.getValue("boundSql.sql");
 			StringBuilder builder = new StringBuilder(originalSql);
 			builder.append(" AND ");
@@ -105,11 +107,8 @@ public class OptimisticLocker implements Interceptor {
 			
 			ParameterHandler handler = (ParameterHandler) PluginUtil.processTarget(invocation.getTarget());
 			MetaObject hm = SystemMetaObject.forObject(handler);
-			
-			VersionLocker vl = VersionLockerResolver.resolve(hm);
-			if(null != vl && !vl.value()) {
-				return invocation.proceed();
-			}
+
+			if (!isVersionLock(hm)) return invocation.proceed();
 			
 			BoundSql boundSql = (BoundSql) hm.getValue("boundSql");
 			Object parameterObject = boundSql.getParameterObject();
@@ -149,6 +148,39 @@ public class OptimisticLocker implements Interceptor {
 	 		pm.setValue(versionColumn, (long) value + 1);
 		}
 		return invocation.proceed();
+	}
+
+	/**
+	 * 是否不拦截
+	 * @param hm
+	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	private boolean isVersionLock(MetaObject hm) throws InvocationTargetException, IllegalAccessException {
+		VersionLocker vl = VersionLockerResolver.resolve(hm);
+		if(null != vl && vl.value()) {
+			return true;
+        }
+
+        if (points == null) {
+			points = new ArrayList<>();
+			if (props != null && !props.isEmpty()) {
+				String point = props.getProperty("point");
+				if (point != null && !point.isEmpty()) {
+					points = Arrays.asList(point.split(","));
+				}
+			}
+		}
+
+		MappedStatement ms = (MappedStatement) hm.getValue("mappedStatement");
+		String id = ms.getId();
+		for (String point : points) {
+			if (Pattern.matches(point,id)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

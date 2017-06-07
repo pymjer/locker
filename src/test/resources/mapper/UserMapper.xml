@@ -9,6 +9,10 @@
 	<update id="updateUser">
 		update smart_user set name = #{name}, password = #{password}, version = #{version} where id = #{id}
 	</update>
+
+	<update id="updateUserName">
+		update smart_user set name = #{name}, version = #{version} where id = #{id}
+	</update>
 	
 	<update id="updateUserErr">
 		update smart_user set name = #{name}, password = #{password}, version = #{version} where id = #{id}

@@ -74,6 +74,13 @@ public class UserMapperTest {
 //		DEBUG - ==> Parameters: test(String), test(String), 101(Long), 100(Integer), 100(Long)
 //		DEBUG - <==    Updates: 1
 	}
+
+	@Test
+	public void updateUserNameTest() {
+		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+		Integer result = userMapper.updateUserName(100,"newName",100L);
+		Assert.assertEquals(1L, Long.parseLong(result + ""));
+	}
 	
 	@Test
 	public void updateUserMapTest() {
