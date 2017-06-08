@@ -139,13 +139,15 @@ public class OptimisticLocker implements Interceptor {
             // increase version
             pm.setValue(vColumn, (long) value + 1);
         } else if ("update".equals(interceptMethod)) {
-            Executor executor = (Executor) PluginUtil.processTarget(invocation.getTarget());
-            MetaObject excutorMeta = SystemMetaObject.forObject(executor);
-            MetaObject hm = excutorMeta.metaObjectForProperty("delegate");
-            if (!isVersionLock(hm)) return invocation.proceed();
+            // TODO 对乐观锁更新结果为0的抛出异常，暂时未完成
 
-            int result = (int) invocation.proceed();
-            if(result != 1) throw new RuntimeException("更新失败！");
+//            Executor executor = (Executor) PluginUtil.processTarget(invocation.getTarget());
+//            MetaObject excutorMeta = SystemMetaObject.forObject(executor);
+//            MetaObject hm = excutorMeta.metaObjectForProperty("delegate"); // 不能得到hm
+//            if (!isVersionLock(hm)) return invocation.proceed();
+//
+//            int result = (int) invocation.proceed();
+//            if(result != 1) throw new RuntimeException("更新失败！");
         }
         return invocation.proceed();
     }
