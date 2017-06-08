@@ -39,7 +39,7 @@ public class UserMapperTest {
 		user.setVersion(100L);
 	}
 	
-	@After
+	//@After
 	public void resetDatabaseTest() {
 		user.setId(100);
 		user.setName("test");
@@ -84,6 +84,11 @@ public class UserMapperTest {
 
 	@Test
 	public void updateTest() {
+		User user = new User();
+		user.setId(100);
+		user.setName("test2");
+		user.setPassword("test2");
+		user.setVersion(100L);
 		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 		Integer result = userMapper.update(user);
 		Assert.assertEquals(1L, Long.parseLong(result + ""));

@@ -25,6 +25,7 @@ package com.mook.locker.util;
 
 import java.lang.reflect.Proxy;
 
+import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.logging.Log;
@@ -53,7 +54,7 @@ public final class PluginUtil {
 		}
 		
 		// must keep the result object is StatementHandler or ParameterHandler in Optimistic Loker plugin
-		if(!(target instanceof StatementHandler) && !(target instanceof ParameterHandler)) {
+		if(!(target instanceof StatementHandler) && !(target instanceof ParameterHandler) && !(target instanceof Executor)) {
 			if(log.isDebugEnabled()) {
 				log.error(Constent.LogPrefix + "plugin init faild.");
 			}

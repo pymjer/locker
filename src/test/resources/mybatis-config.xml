@@ -7,6 +7,7 @@
 	<plugins>
 		<plugin interceptor="com.mook.locker.interceptor.OptimisticLocker">
 			<property name="point" value=".*UserMapper.updateUserName,.*UserMapper.update" />
+			<property name="versionValueColumn" value="t.version" />
 		</plugin>
 	</plugins>
 	
